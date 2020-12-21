@@ -144,6 +144,8 @@ public:
 
 	float optimize(int mnumOptIts);
 
+	std::vector<double> getResult();
+
 	void printResult(std::string file);
 
 	void debugPlot(std::string name);

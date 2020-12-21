@@ -31,7 +31,10 @@
 
 #include "FullSystem/FullSystem.h"
  
-#include "stdio.h"
+#include <typeinfo> 
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 #include "util/globalFuncs.h"
 #include <Eigen/LU>
 #include <algorithm>
@@ -53,6 +56,8 @@
 #include "IOWrapper/Output3DWrapper.h"
 
 #include "util/ImageAndExposure.h"
+
+#include <vector>
 
 #include <cmath>
 
@@ -240,6 +245,18 @@ void FullSystem::setGammaFunction(float* BInv)
 	Hcalib.B[255] = 255;
 }
 
+std::vector<double> FullSystem::getResult()
+{
+	std::vector<double> pose;
+	int n = allFrameHistory.size();
+	if (n>0)
+	{
+		FrameShell* s = allFrameHistory[n-1];
+		pose={s->timestamp, s->camToWorld.translation().transpose()[0], s->camToWorld.translation().transpose()[1], s->camToWorld.translation().transpose()[2], 
+		s->camToWorld.so3().unit_quaternion().x(), s->camToWorld.so3().unit_quaternion().y(), s->camToWorld.so3().unit_quaternion().z(), s->camToWorld.so3().unit_quaternion().w()};
+	}
+	return pose;
+}
 
 
 void FullSystem::printResult(std::string file)
@@ -254,7 +271,8 @@ void FullSystem::printResult(std::string file)
 	for(FrameShell* s : allFrameHistory)
 	{
 		if(!s->poseValid) continue;
-
+		std::cout<<s->camToWorld.so3().unit_quaternion().x()<< "\n";
+		std::cout<< typeid(s->camToWorld.so3().unit_quaternion()).name() << "\n";
 		if(setting_onlyLogKFPoses && s->marginalizedAt == s->id) continue;
 
 		myfile << s->timestamp <<
@@ -265,6 +283,7 @@ void FullSystem::printResult(std::string file)
 			" " << s->camToWorld.so3().unit_quaternion().w() << "\n";
 	}
 	myfile.close();
+	
 }
 
 
@@ -893,14 +912,13 @@ void FullSystem::addActiveFrame( ImageAndExposure* image, int id )
         for(IOWrap::Output3DWrapper* ow : outputWrapper)
             ow->publishCamPose(fh->shell, &Hcalib);
 
-
-
-
 		lock.unlock();
 		deliverTrackedFrame(fh, needToMakeKF);
 		return;
 	}
 }
+
+
 void FullSystem::deliverTrackedFrame(FrameHessian* fh, bool needKF)
 {
 

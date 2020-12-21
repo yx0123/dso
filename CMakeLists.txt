@@ -41,6 +41,12 @@ find_package(LibZip QUIET)
 find_package(Pangolin 0.2 QUIET)
 find_package(OpenCV QUIET)
 
+find_package(catkin REQUIRED COMPONENTS
+  geometry_msgs
+  roscpp
+)
+
+
 # flags
 set(CMAKE_CXX_FLAGS
    "-std=c++14 -march=native ${CMAKE_CXX_FLAGS}"
@@ -84,11 +90,13 @@ set(dso_SOURCE_FILES
 
 set(DSO_BOOST_LIBRARIES ${Boost_SYSTEM_LIBRARY} ${Boost_THREAD_LIBRARY})
 
+
 include_directories(
   ${PROJECT_SOURCE_DIR}/src
   ${PROJECT_SOURCE_DIR}/thirdparty/Sophus
   ${PROJECT_SOURCE_DIR}/thirdparty/sse2neon
   ${EIGEN3_INCLUDE_DIR}
+  ${catkin_INCLUDE_DIRS}
 ) 
 
 
@@ -144,7 +152,7 @@ if (DSO_BUILD_STATIC_LIBRARY)
 else()
     message("--- dso dynamic library selected.")
     add_library(dso SHARED ${dso_SOURCE_FILES} ${dso_opencv_SOURCE_FILES} ${dso_pangolin_SOURCE_FILES})
-    target_link_libraries(dso ${DSO_BOOST_LIBRARIES})
+    target_link_libraries(dso ${DSO_BOOST_LIBRARIES} ${catkin_LIBRARIES})
     if (HAS_ZIPLIB)
         target_link_libraries(dso ${LIBZIP_LIBRARY})
     endif()
