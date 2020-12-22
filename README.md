@@ -55,7 +55,7 @@ $ catkin build
 $ bin/dso_dataset files=PATH/TO/IMAGES calib=PATH/TO/CALIBRATION/FILE preset=0 mode=1
 
 ```
-###### 3.1 Calibration File for Pre-Rectified Images
+#### 3.1 Calibration File for Pre-Rectified Images
 
     Pinhole fx fy cx cy 0
     in_width in_height
