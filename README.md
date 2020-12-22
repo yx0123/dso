@@ -1,5 +1,106 @@
+# Steps for running DSO with AirSim data (adapted from original README)
+
 # DSO: Direct Sparse Odometry
 
+For ROS integration, refer to [dso_ros](https://github.com/yx0123/dso_ros)
+
+## 1. Installation
+```
+$ cd PATH/TO/CATKIN_WS/src
+$ git clone https://github.com/yx0123/dso.git
+```
+#### 1.1 Required Dependencies
+
+The following instructions are tested on Ubuntu 16.04 and 18.04. Other platforms might work with minor adjustments.
+##### eigen3 and boost (required).
+Required. Install with
+
+    sudo apt-get install libeigen3-dev libboost-all-dev
+
+#### 1.2 Optional Dependencies
+
+##### OpenCV (highly recommended).
+Used to read / write / display images.
+OpenCV is **only** used in `IOWrapper/OpenCV/*`. Without OpenCV, respective 
+dummy functions from `IOWrapper/*_dummy.cpp` will be compiled into the library, which do nothing.
+The main binary will not be created, since it is useless if it can't read the datasets from disk.
+Feel free to implement your own version of these functions with your prefered library, 
+if you want to stay away from OpenCV.
+
+Install with
+
+	sudo apt-get install libopencv-dev
+
+
+##### Pangolin (highly recommended).
+Used for 3D visualization & the GUI.
+Pangolin is **only** used in `IOWrapper/Pangolin/*`. You can compile without Pangolin, 
+however then there is not going to be any visualization / GUI capability. 
+Feel free to implement your own version of `Output3DWrapper` with your preferred library, 
+and use it instead of `PangolinDSOViewer`
+
+Install from [https://github.com/stevenlovegrove/Pangolin](https://github.com/stevenlovegrove/Pangolin)
+
+## 2. Build
+```
+$ cd PATH/TO/CATKIN_WS
+$ source /opt/ros/melodic/setup.bash
+$ catkin init
+$ catkin config -DCMAKE_BUILD_TYPE=Release
+$ catkin build
+```
+
+## 3. Usage
+```
+$ bin/dso_dataset files=PATH/TO/IMAGES calib=PATH/TO/CALIBRATION/FILE preset=0 mode=1
+
+```
+###### 3.1 Calibration File for Pre-Rectified Images
+
+    Pinhole fx fy cx cy 0
+    in_width in_height
+    "crop" / "full" / "none" / "fx fy cx cy 0"
+    out_width out_height
+
+**Explanation:**
+ Across all models `fx fy cx cy` denotes the focal length / principal point **relative to the image width / height**, 
+i.e., DSO computes the camera matrix `K` as
+
+		K(0,0) = width * fx
+		K(1,1) = height * fy
+		K(0,2) = width * cx - 0.5
+		K(1,2) = height * cy - 0.5
+For backwards-compatibility, if the given `cx` and `cy` are larger than 1, DSO assumes all four parameters to directly be the entries of K, 
+and ommits the above computation. 
+
+#### 3.2 Commandline Options
+there are many command line options available, see `main_dso_pangolin.cpp`. some examples include
+- `mode=X`: 
+    -  `mode=0` use if a photometric calibration exists (e.g. TUM monoVO dataset). 
+    -  `mode=1` use if NO photometric calibration exists (e.g. ETH EuRoC MAV dataset). 
+    -  `mode=2` use if images are not photometrically distorted (e.g. synthetic datasets).
+
+- `preset=X`
+    - `preset=0`: default settings (2k pts etc.), not enforcing real-time execution
+    - `preset=1`: default settings (2k pts etc.), enforcing 1x real-time execution
+    - `preset=2`: fast settings (800 pts etc.), not enforcing real-time execution. WARNING: overwrites image resolution with 424 x 320.
+    - `preset=3`: fast settings (800 pts etc.), enforcing 5x real-time execution. WARNING: overwrites image resolution with 424 x 320.
+
+- `nolog=1`: disable logging of eigenvalues etc. (good for performance)
+- `reverse=1`: play sequence in reverse
+- `nogui=1`: disable gui (good for performance)
+- `nomt=1`: single-threaded execution
+- `prefetch=1`: load into memory & rectify all images before running DSO.
+- `start=X`: start at frame X
+- `end=X`: end at frame X
+- `speed=X`: force execution at X times real-time speed (0 = not enforcing real-time)
+- `save=1`: save lots of images for video creation
+- `quiet=1`: disable most console output (good for performance)
+- `sampleoutput=1`: register a "SampleOutputWrapper", printing some sample output data to the commandline. meant as example.
+
+
+
+# Original README below:
 For more information see
 [https://vision.in.tum.de/dso](https://vision.in.tum.de/dso)
 
@@ -94,9 +195,6 @@ this will by default compile a dynamic library `libdso.so`, which can be linked 
 It will also build a binary `dso_dataset`, to run DSO on datasets. However, for this
 OpenCV and Pangolin need to be installed. You can switch to building a static library with `cmake -DDSO_BUILD_STATIC_LIBRARY=ON`.
 Note that with a static library, it seems you might get (slightly) better runtime performance.
-
-
-
 
 
 
@@ -208,9 +306,9 @@ outliers along those borders, and corrupt the scale-pyramid).
 #### 3.2 Commandline Options
 there are many command line options available, see `main_dso_pangolin.cpp`. some examples include
 - `mode=X`: 
-    -  `mode=0` use iff a photometric calibration exists (e.g. TUM monoVO dataset). 
-    -  `mode=1` use iff NO photometric calibration exists (e.g. ETH EuRoC MAV dataset). 
-    -  `mode=2` use iff images are not photometrically distorted (e.g. synthetic datasets).
+    -  `mode=0` use if a photometric calibration exists (e.g. TUM monoVO dataset). 
+    -  `mode=1` use if NO photometric calibration exists (e.g. ETH EuRoC MAV dataset). 
+    -  `mode=2` use if images are not photometrically distorted (e.g. synthetic datasets).
 
 - `preset=X`
     - `preset=0`: default settings (2k pts etc.), not enforcing real-time execution
