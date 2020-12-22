@@ -56,6 +56,7 @@ $ bin/dso_dataset files=PATH/TO/IMAGES calib=PATH/TO/CALIBRATION/FILE preset=0 m
 
 ```
 #### 3.1 Calibration File for Pre-Rectified Images
+Sample [calibration file](https://github.com/yx0123/dso/blob/master/AirSim-camera.txt)
 
     Pinhole fx fy cx cy 0
     in_width in_height
