@@ -2,7 +2,9 @@
 
 # DSO: Direct Sparse Odometry
 
-For ROS integration, refer to [dso_ros](https://github.com/yx0123/dso_ros)
+For ROS integration, refer to [dso_ros](https://github.com/yx0123/dso_ros). 
+
+Set up your catkin workspace by following [this guide](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 
 ## 1. Installation
 ```
