@@ -266,21 +266,21 @@ void FullSystem::printResult(std::string file)
 
 	std::ofstream myfile;
 	myfile.open (file.c_str());
-	myfile << std::setprecision(15);
 
 	for(FrameShell* s : allFrameHistory)
 	{
 		if(!s->poseValid) continue;
-		std::cout<<s->camToWorld.so3().unit_quaternion().x()<< "\n";
-		std::cout<< typeid(s->camToWorld.so3().unit_quaternion()).name() << "\n";
 		if(setting_onlyLogKFPoses && s->marginalizedAt == s->id) continue;
 
 		myfile << s->timestamp <<
-			" " << s->camToWorld.translation().transpose()<<
-			" " << s->camToWorld.so3().unit_quaternion().x()<<
-			" " << s->camToWorld.so3().unit_quaternion().y()<<
-			" " << s->camToWorld.so3().unit_quaternion().z()<<
-			" " << s->camToWorld.so3().unit_quaternion().w() << "\n";
+			" " << s->camToWorld.translation().transpose().x()<<
+			" " << s->camToWorld.translation().transpose().y()<<
+			" " << s->camToWorld.translation().transpose().z()<<
+		 	" " << s->camToWorld.so3().unit_quaternion().x()<<
+		 	" " << s->camToWorld.so3().unit_quaternion().y()<<
+		 	" " << s->camToWorld.so3().unit_quaternion().z()<<
+		 	" " << s->camToWorld.so3().unit_quaternion().w()<< "\n";
+
 	}
 	myfile.close();
 	
