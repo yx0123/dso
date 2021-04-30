@@ -55,6 +55,7 @@ $ catkin build
 
 ## 3. Usage
 ```
+$ cd cd PATH/TO/CATKIN_WS/build/dso
 $ bin/dso_dataset files=PATH/TO/IMAGES calib=PATH/TO/CALIBRATION/FILE preset=0 mode=1
 
 ```
