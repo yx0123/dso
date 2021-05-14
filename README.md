@@ -2,7 +2,7 @@
 
 Refer to installtion instructions found below.
 
-Before running, preprocess data using [this repository](https://github.com/yx0123/timestamp_generator.git) This will create a timestamps.txt text file which should be placed in the same folder as image_left (eg ~/16-833-Project-Datasets/eow_easy_P002/P002/times.txt)
+Before running, preprocess data using [this repository](https://github.com/yx0123/times_generator.git) This will create a `timestamps.txt` text file which should be placed in the same folder as `image_left` (eg `~/16-833-Project-Datasets/eow_easy_P002/P002/times.txt`)
 
 Run with:
 ```
