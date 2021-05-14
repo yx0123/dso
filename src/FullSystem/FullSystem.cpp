@@ -266,6 +266,8 @@ void FullSystem::printResult(std::string file)
 
 	std::ofstream myfile;
 	myfile.open (file.c_str());
+	myfile << std::setprecision(18);
+
 
 	for(FrameShell* s : allFrameHistory)
 	{
