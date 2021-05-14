@@ -6,8 +6,12 @@ Before running, preprocess data using `create_timestamps_dso.py` from [this repo
 
 Run with:
 ```
-$ cd PATH/TO/CATKIN_WS/build/dso
-$ bin/dso_dataset files=PATH/TO/IMAGE/FOLDER calib=PATH/TO/CATKIN_WS/src/dso/camera_ta.txt preset=0 mode=1
+cd PATH/TO/CATKIN_WS/build/dso
+bin/dso_dataset files=PATH/TO/IMAGE/FOLDER calib=PATH/TO/CATKIN_WS/src/dso/camera_ta.txt preset=0 mode=1
+```
+eg
+```
+bin/dso_dataset files=~/16-833-Project-Datasets/eow_easy_P002/P002/image_left calib=~/catkin_ws/src/dso/camera_ta.txt preset=0 mode=1
 ```
 
 # Steps for running DSO with AirSim data (adapted from original README)
