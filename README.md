@@ -1,3 +1,12 @@
+# Steps for running DSO with TartanAir dataset (adapted from original README)
+Refer to installtion instructions found below. 
+Preprocess data using [this repository](https://github.com/yx0123/timestamp_generator.git)
+Run
+```
+$ cd PATH/TO/CATKIN_WS/build/dso
+$ bin/dso_dataset files=PATH/TO/IMAGE/FOLDER calib=PATH/TO/CATKIN_WS/src/dso/camera_ta.txt preset=0 mode=1
+```
+
 # Steps for running DSO with AirSim data (adapted from original README)
 
 # DSO: Direct Sparse Odometry
@@ -55,7 +64,7 @@ $ catkin build
 
 ## 3. Usage
 ```
-$ cd cd PATH/TO/CATKIN_WS/build/dso
+$ cd PATH/TO/CATKIN_WS/build/dso
 $ bin/dso_dataset files=PATH/TO/IMAGES calib=PATH/TO/CALIBRATION/FILE preset=0 mode=1
 
 ```
