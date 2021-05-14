@@ -1,7 +1,10 @@
 # Steps for running DSO with TartanAir dataset (adapted from original README)
-Refer to installtion instructions found below. 
+
+Refer to installtion instructions found below.
+
 Preprocess data using [this repository](https://github.com/yx0123/timestamp_generator.git)
-Run
+
+Run with:
 ```
 $ cd PATH/TO/CATKIN_WS/build/dso
 $ bin/dso_dataset files=PATH/TO/IMAGE/FOLDER calib=PATH/TO/CATKIN_WS/src/dso/camera_ta.txt preset=0 mode=1
